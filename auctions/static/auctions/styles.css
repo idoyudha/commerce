@@ -1,3 +1,17 @@
-body {
+.content {
     padding: 10px;
+}   
+
+.form-signin{
+    display: block;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 100px;
+    margin: auto;
+}
+
+.form-group, .btn {
+    margin: 5px;
 }
