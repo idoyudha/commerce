@@ -28,6 +28,9 @@
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">Log Out</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{% url 'new_listing' %}">Create New Listing</a>
+                            </li>
                         {% else %}
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Log In</a>
@@ -36,18 +39,16 @@
                                 <a class="nav-link active" aria-current="page" href="{% url 'register' %}">Register</a>
                             </li>
                         {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
+                                    {% if user.is_authenticated %}
+                                        Signed in as <strong>{{ user.username }}</strong>
+                                    {% else %}
+                                        Not signed in
+                                    {% endif %}
+                                </a>
+                            </li>
                     </ul>
-                    <form class="d-flex">
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
-                                {% if user.is_authenticated %}
-                                    Signed in as <strong>{{ user.username }}</strong>
-                                {% else %}
-                                    Not signed in
-                                {% endif %}
-                            </a>
-                        </li>
-                    </form>
                 </div>
             </div>
         </nav>

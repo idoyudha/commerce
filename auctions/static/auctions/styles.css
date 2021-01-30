@@ -15,3 +15,8 @@
 .form-group, .btn {
     margin: 5px;
 }
+
+.nav-item {
+    border-style: 1px solid white;
+    border-width: medium;
+}

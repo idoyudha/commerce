@@ -7,3 +7,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(AuctionListing)
 admin.site.register(Bid)
 admin.site.register(Comment)
+
