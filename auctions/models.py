@@ -7,7 +7,8 @@ class User(AbstractUser):
 
 # All of listing product
 class AuctionListing(models.Model):
-    title = models.CharField(max_length=16, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=16)
     #category
     cat = [
         ('1', 'Fashions'),
@@ -16,25 +17,26 @@ class AuctionListing(models.Model):
         ('4', 'Home'),
     ]
     category = models.CharField(max_length=64, choices=cat, default=1)
-    description = models.CharField(max_length=64, null=True)
-    price = models.FloatField(null=True)
-    imageURL = models.URLField(null=True)
-
+    description = models.CharField(max_length=64, blank=True)
+    price = models.IntegerField(blank=True, null=True)
+    imageURL = models.URLField(blank=True, null=True)
     def __str__(self):
         return f"{self.title} - {self.category}"
 
 
 class Bid(models.Model):
-    bid = models.FloatField(null=True)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_bid")
+    title = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="title_bid")
+    bid = models.IntegerField(blank=True, null=True)
     def __str__(self):
-        return f"{self.price}"
+        return f"{self.bid}"
 
 
 class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_comment")
+    title = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="title_comment")
     comment = models.CharField(max_length=64, null=True)
-
     def __str__(self):
-        return f"{self.comment}"
+        return f"{self.user}"
 
 
