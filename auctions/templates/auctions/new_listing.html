@@ -1,51 +1,34 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<!-- <div class="form-signin">
-    <h2>Login</h2>
-
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %} -->
-    <div class="form-group">
-        <form action="{% url 'new_listing' %}" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-secondary">Save</button>
-        </form>
-    </div>
-        <!-- <hr>
+<div class="form-new-listing">
+    <form action="{% url 'new_listing' %}" method="post">
         <div class="input group mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" placeholder="Title">
+            {{ form.title }}
         </div>
         <div class="input group mb-3">
-            <label for="title" class="form-label">Category</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Select Category</option>
-                <option value="1">Fashions</option>
-                <option value="2">Toys</option>
-                <option value="3">Electronics</option>
-                <option value="3">Home</option>
-            </select>
+            <label for="category" class="form-label">Category</label>
+            {{ form.category }}
         </div>
         <div class="input group mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" rows="4"></textarea>
+            {{ form.description}}
         </div>
         <label for="price" class="form-label">Price</label>
         <div class="input-group mb-3">
             <span class="input-group-text">$</span>
-            <input type="number" class="form-control" id="price" aria-label="Amount (to the nearest dollar)">
+            {{ form.price }}
             <span class="input-group-text">.00</span>
         </div>
         <div class="input group mb-3">
-            <label for="image" class="form-label">Image URL</label>
-            <input type="url" class="form-control" id="image" placeholder="image url">
-        </div> -->
-    
-    
-    
-    <!-- Don't have an account? <a href="{% url 'register' %}">Register here.</a>
-</div> -->
+            <label for="image" class="form-label">Image URL (optional)</label>
+            {{ form.imageURL }}
+        </div>
+        <hr>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="submit" class="btn btn-outline-primary btn-md" value="submit">Save</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

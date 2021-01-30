@@ -2,13 +2,13 @@
     padding: 10px;
 }   
 
-.form-signin{
+.form-signin {
     display: block;
     align-items: center;
     text-align: center;
     width: 100%;
     max-width: 500px;
-    padding: 100px;
+    padding: 50px;
     margin: auto;
 }
 
@@ -19,4 +19,13 @@
 .nav-item {
     border-style: 1px solid white;
     border-width: medium;
+}
+
+.form-new-listing {
+    display: block;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    margin: auto;
 }

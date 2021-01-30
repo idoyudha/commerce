@@ -11,10 +11,11 @@ class AuctionListing(models.Model):
     title = models.CharField(max_length=16)
     #category
     cat = [
-        ('1', 'Fashions'),
-        ('2', 'Toys'),
-        ('3', 'Electronics'),
+        ('1', 'No Category'),
+        ('2', 'Electronics'),
+        ('3', 'Fashions'),
         ('4', 'Home'),
+        ('5', 'Toys')
     ]
     category = models.CharField(max_length=64, choices=cat, default=1)
     description = models.CharField(max_length=64, blank=True)
