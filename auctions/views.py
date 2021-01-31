@@ -3,6 +3,8 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.forms.models import modelformset_factory
+
 
 from .models import User, AuctionListing, Bid, Comment
 from .forms import ListingForm, BidForm, CommentForm
@@ -64,9 +66,24 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def new_listing(request):
-    #if request.method == "POST":
-    #    form = ListingForm(request.POST)
+    if request.method == 'POST':
+        form = ListingForm(request.POST)
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.user = request.user
+            data.save()
+            #AuctionListing.objects.create(
+            #    title       = request.POST['title'],
+            #    category    = request.POST['category'],
+            #    description = request.POST['description'],
+            #    price       = request.POST['price'],
+            #    imageURL    = request.POST['imageURL']
+            #)
+            #AuctionListing.save()
+            return HttpResponseRedirect('/')
+    else:
+        form = ListingForm()
     context = {
-        "form": ListingForm()
+        "form": form
     }
     return render(request, "auctions/new_listing.html", context)

@@ -12,15 +12,16 @@ class AuctionListing(models.Model):
     #category
     cat = [
         ('1', 'No Category'),
-        ('2', 'Electronics'),
-        ('3', 'Fashions'),
-        ('4', 'Home'),
-        ('5', 'Toys')
+        ('2', 'Automotive'),
+        ('3', 'Electronics'),
+        ('4', 'Fashions'),
+        ('5', 'Home'),
+        ('6', 'Toys')
     ]
     category = models.CharField(max_length=64, choices=cat, default=1)
-    description = models.CharField(max_length=64, blank=True)
-    price = models.IntegerField(blank=True, null=True)
-    imageURL = models.URLField(blank=True, null=True)
+    description = models.CharField(max_length=1000, null=True, blank=True)
+    price = models.IntegerField(null=True, blank=True)
+    imageURL = models.URLField(null=True, blank=True)
     def __str__(self):
         return f"{self.title} - {self.category}"
 

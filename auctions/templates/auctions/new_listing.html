@@ -3,6 +3,7 @@
 {% block body %}
 <div class="form-new-listing">
     <form action="{% url 'new_listing' %}" method="post">
+        {% csrf_token %}
         <div class="input group mb-3">
             <label for="title" class="form-label">Title</label>
             {{ form.title }}
