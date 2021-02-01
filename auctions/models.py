@@ -8,7 +8,7 @@ class User(AbstractUser):
 # All of listing product
 class AuctionListing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=16)
+    title = models.CharField(max_length=64)
     #category
     cat = [
         ('1', 'No Category'),

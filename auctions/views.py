@@ -11,7 +11,11 @@ from .forms import ListingForm, BidForm, CommentForm
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    data = AuctionListing.objects.all()
+    context = {
+        'data': data
+    }
+    return render(request, "auctions/index.html", context)
 
 
 def login_view(request):
@@ -72,14 +76,6 @@ def new_listing(request):
             data = form.save(commit=False)
             data.user = request.user
             data.save()
-            #AuctionListing.objects.create(
-            #    title       = request.POST['title'],
-            #    category    = request.POST['category'],
-            #    description = request.POST['description'],
-            #    price       = request.POST['price'],
-            #    imageURL    = request.POST['imageURL']
-            #)
-            #AuctionListing.save()
             return HttpResponseRedirect('/')
     else:
         form = ListingForm()
@@ -87,3 +83,7 @@ def new_listing(request):
         "form": form
     }
     return render(request, "auctions/new_listing.html", context)
+
+# should display (at minimum) the title, description, current price, and photo (if one exists for the listing).
+def activeListings(request):
+    pass
