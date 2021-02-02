@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+      {% for list in data %}
+      <div class="card text-dark bg-light mt-3" style="max-width: 1000px;">
+        <div class="row g-0 h-17">
+          <div class="col-4">
+            <img src="{{ list.imageURL }}" alt="...">
+          </div>
+          <div class="col-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ list.title }}</h5>
+              <p class="card-text mb-1">Current Price: <b>${{ list.price }}</b></p>
+              <p class="card-text">{{ list.category }}</p>
+              <p class="card-text">{{ list.description }}</p>
+              <p class="card-text"><small><i>Created by: {{ list.user }}</i></small></p>
+            </div>
+            <div class="button m-2">
+              <a href="#" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+{% endblock %}

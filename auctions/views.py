@@ -13,7 +13,7 @@ from .forms import ListingForm, BidForm, CommentForm
 def index(request):
     data = AuctionListing.objects.all()
     context = {
-        'data': data
+        'data': data,
     }
     return render(request, "auctions/index.html", context)
 
@@ -85,5 +85,11 @@ def new_listing(request):
     return render(request, "auctions/new_listing.html", context)
 
 # should display (at minimum) the title, description, current price, and photo (if one exists for the listing).
-def activeListings(request):
-    pass
+def specific(request, title):
+    x = title.replace("+", " ")
+    data = AuctionListing.objects.filter(title=x)
+    context = {
+        "data": data,
+        "title": x
+    }
+    return render(request, "auctions/specific.html", context)
