@@ -6,11 +6,11 @@
       {% for list in data %}
         <div class="col">
           <div class="card h-100">
-            <a href="#">
+            <a href="/view/{{list.title}}">
               <img src="{{ list.imageURL }}" class="card-img-top" onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU'" alt="..." style="width: 100%; height: 15vw; object-fit: cover;">
             </a>
             <div class="card-body">
-              <a href=#>
+              <a href="/view/{{list.title}}">
                 <h5 class="card-title">{{ list.title }}</h5>
               </a>
               <p class="card-text">{{ list.description }}</p>

@@ -86,8 +86,7 @@ def new_listing(request):
 
 # should display (at minimum) the title, description, current price, and photo (if one exists for the listing).
 def specific(request, title):
-    x = title.replace("+", " ")
-    data = AuctionListing.objects.filter(title=x)
+    data = AuctionListing.objects.filter(title=title)
     if request.method == 'POST':
         bid_form = BidForm(request.POST)
         comment_form = CommentForm(request.POST)
@@ -109,7 +108,7 @@ def specific(request, title):
 
     context = {
         "data": data,
-        "title": x,
+        "title": title,
         "bid_form": bid_form,
         "comment_form": comment_form
     }
