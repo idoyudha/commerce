@@ -1,25 +1,59 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+  <div class="container">
       {% for list in data %}
-      <div class="card text-dark bg-light mt-3" style="max-width: 1000px;">
-        <div class="row g-0 h-17">
-          <div class="col-4">
+      <div class="card text-dark bg-light mb-5 mt-5" style="width: 100%;">
+        <div class="row g-0">
+          <div class="col-md-4">
             <img src="{{ list.imageURL }}" alt="...">
           </div>
           <div class="col-8">
             <div class="card-body">
               <h5 class="card-title">{{ list.title }}</h5>
               <p class="card-text mb-1">Current Price: <b>${{ list.price }}</b></p>
-              <p class="card-text">{{ list.category }}</p>
-              <p class="card-text">{{ list.description }}</p>
+              <p class="card-text mb-2"><small>{{ list.category }}</small></p>
+              <p class="card-text mb-1">{{ list.description }}</p>
               <p class="card-text"><small><i>Created by: {{ list.user }}</i></small></p>
             </div>
-            <div class="button m-2">
+            <div class="button m-1">
               <a href="#" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
             </div>
           </div>
         </div>
       </div>
       {% endfor %}
+  </div>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <form action="#" method="post">
+        {% csrf_token %}
+        <div class="card h-100">
+          <h5 class="card-header">Add Comment</h5>
+          <div class="card-body">
+            <textarea class="form-control" id="comment" rows="2"></textarea>
+            <div class="d-grid gap-2 mt-2">
+              <button type="submit" class="btn btn-outline-primary btn-md" value="submit">Post Comment</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-6">
+      <form action="#" method="post">
+        {% csrf_token %}
+        <div class="card h-100">
+          <h5 class="card-header">Add Comment</h5>
+          <div class="card-body">
+            <textarea class="form-control" id="comment" rows="2"></textarea>
+            <div class="d-grid gap-2 mt-2">
+              <button type="submit" class="btn btn-outline-primary btn-md" value="submit">Post Comment</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
 {% endblock %}
