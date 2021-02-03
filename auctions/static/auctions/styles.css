@@ -40,3 +40,8 @@ img {
     height: 15vw;
     object-fit: cover;
 }
+
+.verti {
+    height: 300px;
+    margin-top: 50px;
+}

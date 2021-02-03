@@ -29,7 +29,7 @@ class AuctionListing(models.Model):
 class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_bid")
     title = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="title_bid")
-    bid = models.IntegerField(blank=True, null=True)
+    bid_user = models.IntegerField(blank=True, null=True)
     def __str__(self):
         return f"{self.bid}"
 

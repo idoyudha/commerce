@@ -23,9 +23,9 @@ class ListingForm(ModelForm):
 class BidForm(ModelForm):
     class Meta(object):
         model = Bid
-        fields = ['bid']
+        fields = ['bid_user']
         widgets = {
-            'bid': forms.NumberInput(attrs={'class': 'form-control', 'id': 'bid'})
+            'bid_user': forms.NumberInput(attrs={'class': 'form-control', 'id': 'bid'})
         }
 
 class CommentForm(ModelForm):

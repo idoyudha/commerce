@@ -88,8 +88,29 @@ def new_listing(request):
 def specific(request, title):
     x = title.replace("+", " ")
     data = AuctionListing.objects.filter(title=x)
+    if request.method == 'POST':
+        bid_form = BidForm(request.POST)
+        comment_form = CommentForm(request.POST)
+        if bid_form.is_valid():
+            bid_data = bid_form.save(commit=False)
+            bid_data.user = request.user
+            bid_data.title = request.title 
+            bid_data.save()
+            return HttpResponseRedirect('specific')
+        if comment_form.is_valid():
+            comment_data = comment_form.save(commit=False)
+            comment_data.user = request.user
+            comment_data.title = request.title 
+            comment_data.save()
+            return HttpResponseRedirect('specific')
+    else:
+        bid_form = BidForm()
+        comment_form = CommentForm()
+
     context = {
         "data": data,
-        "title": x
+        "title": x,
+        "bid_form": bid_form,
+        "comment_form": comment_form
     }
     return render(request, "auctions/specific.html", context)
