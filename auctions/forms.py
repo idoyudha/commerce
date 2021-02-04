@@ -11,7 +11,7 @@ class ListingForm(ModelForm):
     class Meta(object):
         model = AuctionListing
         # we can use exclude or __all__ in this field below
-        exclude = ('user',)
+        exclude = ('user', 'time')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control', 'id': 'title'}),
@@ -23,9 +23,9 @@ class ListingForm(ModelForm):
 class BidForm(ModelForm):
     class Meta(object):
         model = Bid
-        fields = ['bid_user']
+        fields = ['amount_bid']
         widgets = {
-            'bid_user': forms.NumberInput(attrs={'class': 'form-control', 'id': 'bid'})
+            'amount_bid': forms.NumberInput(attrs={'class': 'form-control', 'id': 'amount_bid'})
         }
 
 class CommentForm(ModelForm):

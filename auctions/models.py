@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from datetime import timedelta, datetime, tzinfo, timezone
 
 # This model behaves identically to the default user model
 class User(AbstractUser):
@@ -20,26 +21,23 @@ class AuctionListing(models.Model):
     ]
     category = models.CharField(max_length=64, choices=cat, default=1)
     description = models.CharField(max_length=1000, null=True, blank=True)
-    price = models.IntegerField(null=True, blank=True)
+    price = models.PositiveIntegerField(null=True, blank=True)
     imageURL = models.URLField(null=True, blank=True)
+    time = models.DateTimeField(default=datetime.now)
     def __str__(self):
         return f"{self.title} - {self.category}"
 
 
 class Bid(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_bid")
-    title = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="title_bid")
-    bid_user = models.IntegerField(blank=True, null=True)
-    def __str__(self):
-        return f"{self.bid}"
-
+    amount_bid = models.PositiveIntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
+    
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_comment")
-    title = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="title_comment")
-    comment_user = models.CharField(max_length=64, null=True)
+    comment_user = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return f"{self.user}"
 
 
