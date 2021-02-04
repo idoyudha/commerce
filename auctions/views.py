@@ -3,8 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.forms.models import modelformset_factory
-
+from django.contrib.auth.decorators import login_required
 
 from .models import User, AuctionListing, Bid, Comment
 from .forms import ListingForm, BidForm, CommentForm
@@ -71,6 +70,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+@login_required(login_url='/login/')
 def new_listing(request):
     if request.method == 'POST':
         form = ListingForm(request.POST)
@@ -99,6 +99,7 @@ def specific(request, title):
     }
     return render(request, "auctions/specific.html", context)
 
+@login_required(login_url='/login/')
 def bid(request, title):
     data = AuctionListing.objects.filter(title=title)
     if request.method == 'POST':
@@ -106,7 +107,7 @@ def bid(request, title):
         if bid_form.is_valid():
             bid_data = bid_form.save(commit=False)
             bid_data.user = request.user
-            bid_data.title = AuctionListing.objects.get(title=title)
+            bid_data.listing = AuctionListing.objects.get(title=title)
             bid_data.save()
             return redirect("specific", title)
         else:
@@ -127,5 +128,6 @@ def bid(request, title):
         }
         return render(request, "auctions/specific.html", context)
 
+@login_required(login_url='/login/')
 def watchlist(request):
     return render(request, "auctions/watchlist.html")

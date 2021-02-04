@@ -14,10 +14,10 @@
       <p class="card-text mb-2"><small>{{ list.category }}</small></p>
       <p class="card-text mb-1">{{ list.description }}</p>
       <p class="card-text mb-1">Starting Price: <b>${{ list.price }}</b></p>
-      <p class="card-text mb-1">Current Price: <b>${{ list.price }}</b></p>
+      <p class="card-text mb-1">Current Bid: <b>${{ list.price }}</b></p>
     </div>
     <div class="col-sm">
-      <form action="#" method="post">
+      <form action="{% url 'bid' title %}" method="post">
         {% csrf_token %}
         <div class="card border-info mb-3 h-100">
           <h5 class="card-header">Bid</h5>
