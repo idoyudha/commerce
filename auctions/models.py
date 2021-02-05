@@ -40,4 +40,9 @@ class Comment(models.Model):
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now=True)
 
+class Watchlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
+
+
 

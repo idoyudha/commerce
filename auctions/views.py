@@ -91,17 +91,22 @@ def specific(request, title):
     data = AuctionListing.objects.filter(title=title)
     bid_form = BidForm()
     comment_form = CommentForm()
-    # bid query
+    # query id of auction
     pk = AuctionListing.objects.values('pk').get(title=title)
     id = pk.get('pk')
+    # query bid
     bid_queryset = Bid.objects.values_list('amount_bid', flat=True).filter(listing=id)
     highest_bid = bid_queryset.order_by('amount_bid').last()
+    # query comment
+    comment_queryset = Comment.objects.filter(listing=id)
+    comments = comment_queryset.order_by('-time')
     context = {
         "data": data,
         "title": title,
         "bid_form": bid_form,
         "comment_form": comment_form,
         "bid": highest_bid,
+        "comments":comments
     }
     return render(request, "auctions/specific.html", context)
 
@@ -156,4 +161,18 @@ def bid(request, title):
 
 @login_required(login_url='/login/')
 def watchlist(request):
-    return render(request, "auctions/watchlist.html")
+    return render(request, 'auctions/watchlist.html')
+
+@login_required(login_url='/login/')
+def comment(request, title):
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment_data = comment_form.save(commit=False)
+            comment_data.user = request.user
+            comment_data.listing = AuctionListing.objects.get(title=title)
+            comment_data.save()
+            return redirect('specific', title=title)
+    else:
+        comment_form = CommentForm()
+    return redirect('specific', title=title)

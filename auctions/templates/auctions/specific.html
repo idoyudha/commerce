@@ -8,13 +8,23 @@
       <img src="{{ list.imageURL }}" alt="...">
     </div>
     <div class="col-6">
-      <h5 class="card-title">{{ list.title }}</h5>
+      <div class="row">
+        <div class="col">
+          <h5 class="card-title">{{ list.title }}</h5>
+        </div>
+        <div class="col">
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'watchlist' %}" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
+          </div>
+        </div>
+      </div>
       <p class="card-text"><small><i>Created by: {{ list.user }} at {{ list.time }} UTC </i></small></p>
       <hr>
       <p class="card-text mb-2"><small>{{ list.category }}</small></p>
       <p class="card-text mb-1">{{ list.description }}</p>
       <p class="card-text mb-1">Starting Price: <b>${{ list.price }}</b></p>
       <p class="card-text mb-1">Highest Bid: <b>${{ bid }}</b></p>
+      
     </div>
     <div class="col-sm">
       {% if user.is_authenticated %}
@@ -57,7 +67,7 @@
 <div class="container-fluid">
   <div class="col">
     {% if user.is_authenticated %}
-    <form action="#" method="post">
+    <form action="{% url 'comment' title %}" method="post">
       {% csrf_token %}
       <div class="card h-100">
         <h5 class="card-header">Add Comment</h5>
@@ -77,5 +87,16 @@
     {% endif %}
   </div>
 </div>
-  
+<div class="container-fluid">
+  <div class="col mt-3">
+    {% for comment in comments %}
+    {{ comment.user }}
+    <br>
+    Comment on {{ comment.time }}
+    <br>
+    {{ comment.comment_user }}
+    <hr>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

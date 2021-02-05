@@ -11,4 +11,5 @@ urlpatterns = [
     path("view/<str:title>", views.specific, name="specific"),
     path("watchlist", views.watchlist, name="watchlist"),
     path("bid/<str:title>", views.bid, name="bid"),
+    path("comment/<str:title>", views.comment, name="comment"),
 ]
