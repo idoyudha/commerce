@@ -29,7 +29,7 @@ class AuctionListing(models.Model):
 
 
 class Bid(models.Model):
-    amount_bid = models.PositiveIntegerField()
+    amount_bid = models.PositiveIntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
     

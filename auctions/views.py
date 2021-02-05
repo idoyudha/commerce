@@ -5,10 +5,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
+
 from .models import User, AuctionListing, Bid, Comment
 from .forms import ListingForm, BidForm, CommentForm
 
-from datetime import date, datetime
 
 
 def index(request):
@@ -91,31 +91,56 @@ def specific(request, title):
     data = AuctionListing.objects.filter(title=title)
     bid_form = BidForm()
     comment_form = CommentForm()
+    # bid query
+    pk = AuctionListing.objects.values('pk').get(title=title)
+    id = pk.get('pk')
+    bid_queryset = Bid.objects.values_list('amount_bid', flat=True).filter(listing=id)
+    highest_bid = bid_queryset.order_by('amount_bid').last()
     context = {
         "data": data,
         "title": title,
         "bid_form": bid_form,
-        "comment_form": comment_form
+        "comment_form": comment_form,
+        "bid": highest_bid,
     }
     return render(request, "auctions/specific.html", context)
 
-@login_required(login_url='/login/')
 def bid(request, title):
     data = AuctionListing.objects.filter(title=title)
+    price = AuctionListing.objects.values_list('price', flat=True).filter(title=title).last()
+    # bid query
+    pk = AuctionListing.objects.values('pk').get(title=title)
+    id = pk.get('pk')
+    bid_queryset = Bid.objects.values_list('amount_bid', flat=True).filter(listing=id)
+    highest_bid = bid_queryset.order_by('amount_bid').last()
+    highest_bid = 0 if highest_bid is None else highest_bid
     if request.method == 'POST':
         bid_form = BidForm(request.POST)
-        if bid_form.is_valid():
+        bid = int(request.POST.get('amount_bid'))
+        if bid_form.is_valid() and bid > highest_bid and bid > price:
             bid_data = bid_form.save(commit=False)
             bid_data.user = request.user
             bid_data.listing = AuctionListing.objects.get(title=title)
             bid_data.save()
-            return redirect("specific", title)
+            # return highest bid after saving
+            highest_bid = bid_queryset.order_by('amount_bid').last()
+            context = {
+                "data": data,
+                "title": title,
+                "bid_form": BidForm(),
+                "comment_form": CommentForm(),
+                "bid": highest_bid,
+                "message1": 'Bid success!'
+            }
+            return render(request, "auctions/specific.html", context)
         else:
             context = {
             "data": data,
             "title": title,
             "bid_form": bid_form,
-            "comment_form": CommentForm()
+            "bid": highest_bid,
+            "comment_form": CommentForm(),
+            "message2": 'Bid must be greater than last bid or starting price'
             }
             return render(request, "auctions/specific.html", context)
 
@@ -124,6 +149,7 @@ def bid(request, title):
             "data": data,
             "title": title,
             "bid_form": BidForm(),
+            "bid": highest_bid,
             "comment_form": CommentForm()
         }
         return render(request, "auctions/specific.html", context)
