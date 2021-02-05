@@ -17,7 +17,11 @@
             </div>
             {% if user.is_authenticated %}
             <div class="button m-2">
-                <a href="#" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
+              {% if list.id not in data_watchlist %}
+                <a href="{% url 'watchlist' %}" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
+              {% else %}
+                <a href="{% url 'watchlist' %}" class="btn btn-outline-warning btn-sm">Remove Watchlist</a>
+              {% endif %}
             </div>
             {% endif %}
             <div class="card-footer text-muted">

@@ -15,8 +15,12 @@
         {% if user.is_authenticated %}
         <div class="col">
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="{% url 'watchlist' %}" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
-          </div>
+            {% if list.id not in data_watchlist %}
+              <a href="{% url 'watchlist' %}" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
+            {% else %}
+              <a href="{% url 'watchlist' %}" class="btn btn-outline-warning btn-sm">Remove Watchlist</a>
+            {% endif %}
+            </div>
         </div>
         {% endif %}
       </div>

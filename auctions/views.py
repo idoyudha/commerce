@@ -13,8 +13,12 @@ from .forms import ListingForm, BidForm, CommentForm
 
 def index(request):
     data = AuctionListing.objects.all()
+    # watchlist button config
+    user = request.user.id
+    data_watchlist = AuctionListing.objects.filter(watchlist=user).values_list('id', flat=True)
     context = {
-        'data': data
+        'data': data,
+        'data_watchlist': data_watchlist
     }
     return render(request, "auctions/index.html", context)
 
@@ -100,9 +104,13 @@ def specific(request, title):
     # query comment
     comment_queryset = Comment.objects.filter(listing=id)
     comments = comment_queryset.order_by('-time')
+    # watchlist button config
+    user = request.user.id
+    data_watchlist = AuctionListing.objects.filter(watchlist=user).values_list('id', flat=True)
     context = {
         "data": data,
         "title": title,
+        "data_watchlist": data_watchlist,
         "bid_form": bid_form,
         "comment_form": comment_form,
         "bid": highest_bid,
