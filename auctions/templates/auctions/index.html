@@ -15,14 +15,16 @@
               </a>
               <p class="card-text">{{ list.description }}</p>
             </div>
+            {% if user.is_authenticated %}
             <div class="button m-2">
                 <a href="#" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
             </div>
+            {% endif %}
             <div class="card-footer text-muted">
               Starting price: ${{ list.price }}
             </div>
           </div>
         </div>
       {% endfor %}
-      </div>    
+    </div>    
 {% endblock %}

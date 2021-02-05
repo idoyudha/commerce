@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from datetime import timedelta, datetime, tzinfo, timezone
+from datetime import datetime
 
 # This model behaves identically to the default user model
 class User(AbstractUser):
@@ -8,7 +8,7 @@ class User(AbstractUser):
 
 # All of listing product
 class AuctionListing(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_auction = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
     #category
     cat = [
@@ -24,25 +24,22 @@ class AuctionListing(models.Model):
     price = models.PositiveIntegerField(null=True, blank=True)
     imageURL = models.URLField(null=True, blank=True)
     time = models.DateTimeField(default=datetime.now)
+    watchlist = models.ManyToManyField(User, related_name='user_watchlist', blank=True)
+
     def __str__(self):
         return f"{self.title} - {self.category}"
 
 
 class Bid(models.Model):
     amount_bid = models.PositiveIntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_bid = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
-    
 
+    
 class Comment(models.Model):
     comment_user = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now=True)
-
-class Watchlist(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
-
 
 

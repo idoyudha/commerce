@@ -12,13 +12,15 @@
         <div class="col">
           <h5 class="card-title">{{ list.title }}</h5>
         </div>
+        {% if user.is_authenticated %}
         <div class="col">
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <a href="{% url 'watchlist' %}" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
           </div>
         </div>
+        {% endif %}
       </div>
-      <p class="card-text"><small><i>Created by: {{ list.user }} at {{ list.time }} UTC </i></small></p>
+      <p class="card-text"><small><i>Created by: {{ list.user_auction }} at {{ list.time }} UTC </i></small></p>
       <hr>
       <p class="card-text mb-2"><small>{{ list.category }}</small></p>
       <p class="card-text mb-1">{{ list.description }}</p>
@@ -27,8 +29,9 @@
       
     </div>
     <div class="col-sm">
-      {% if user.is_authenticated %}
-      <form action="{% url 'bid' title %}" method="post">
+      {% if list.user != user %}
+        {% if user.is_authenticated %}
+        <form action="{% url 'bid' title %}" method="post">
         {% csrf_token %}
         <div class="card border-info mb-3 h-100">
           <h5 class="card-header">Bid</h5>
@@ -43,22 +46,27 @@
             </div>
           </div>
         </div>
-      </form>
-      {% if message1 %}
-        <div class="alert alert-success" role="alert">
-          {{ message1 }}
+        </form>
+        {% if message1 %}
+          <div class="alert alert-success" role="alert">
+            {{ message1 }}
+          </div>
+        {% endif %}
+        {% if message2 %}
+          <div class="alert alert-warning" role="alert">
+            {{ message2 }}
+          </div>
+        {% endif %}
+        {% else %}
+        <div class="bid log" style="margin: auto; text-align: center; border: 1px solid black; height: 100%;">
+          <p>You need to log in for bidding!</p> 
+          <a href="{% url 'login' %}">Log In</a>
         </div>
-      {% endif %}
-      {% if message2 %}
-        <div class="alert alert-warning" role="alert">
-          {{ message2 }}
-        </div>
-      {% endif %}
+        {% endif %}
       {% else %}
-      <div class="bid log" style="margin: auto; text-align: center; border: 1px solid black; height: 100%;">
-        <p>You need to log in for bidding!</p> 
-        <a href="{% url 'login' %}">Log In</a>
-      </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
+          <button type="button" class="btn btn-outline-warning btn-sm">Close this bid!</button>
+        </div>
       {% endif %}
     </div>
   </div>
@@ -89,14 +97,17 @@
 </div>
 <div class="container-fluid">
   <div class="col mt-3">
-    {% for comment in comments %}
-    {{ comment.user }}
-    <br>
-    Comment on {{ comment.time }}
-    <br>
-    {{ comment.comment_user }}
-    <hr>
-    {% endfor %}
+    <div class="card text-dark bg-light mb-3">
+      <h5 class="card-header">Comment</h5>
+      {% for comment in comments %}
+      <div class="card-body">
+        <h5 class="card-title">{{ comment.user }}</h5>
+        <p class="card-text">Comment on {{ comment.time }}</p>
+        <p class="card-text">{{ comment.comment_user }}</p>
+        <hr>
+      </div>
+      {% endfor %}
+    </div>
   </div>
 </div>
 {% endblock %}

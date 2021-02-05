@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -76,7 +76,7 @@ def new_listing(request):
         form = ListingForm(request.POST)
         if form.is_valid():
             data = form.save(commit=False)
-            data.user = request.user
+            data.user_auction = request.user
             data.save()
             return HttpResponseRedirect('/')
     else:
@@ -119,12 +119,15 @@ def bid(request, title):
     bid_queryset = Bid.objects.values_list('amount_bid', flat=True).filter(listing=id)
     highest_bid = bid_queryset.order_by('amount_bid').last()
     highest_bid = 0 if highest_bid is None else highest_bid
+    # query comment
+    comment_queryset = Comment.objects.filter(listing=id)
+    comments = comment_queryset.order_by('-time')
     if request.method == 'POST':
         bid_form = BidForm(request.POST)
         bid = int(request.POST.get('amount_bid'))
         if bid_form.is_valid() and bid > highest_bid and bid > price:
             bid_data = bid_form.save(commit=False)
-            bid_data.user = request.user
+            bid_data.user_bid = request.user
             bid_data.listing = AuctionListing.objects.get(title=title)
             bid_data.save()
             # return highest bid after saving
@@ -135,7 +138,8 @@ def bid(request, title):
                 "bid_form": BidForm(),
                 "comment_form": CommentForm(),
                 "bid": highest_bid,
-                "message1": 'Bid success!'
+                "message1": 'Bid success!',
+                "comments": comments
             }
             return render(request, "auctions/specific.html", context)
         else:
@@ -145,7 +149,8 @@ def bid(request, title):
             "bid_form": bid_form,
             "bid": highest_bid,
             "comment_form": CommentForm(),
-            "message2": 'Bid must be greater than last bid or starting price'
+            "message2": 'Bid must be greater than last bid or starting price',
+            "comments": comments
             }
             return render(request, "auctions/specific.html", context)
 
@@ -161,7 +166,13 @@ def bid(request, title):
 
 @login_required(login_url='/login/')
 def watchlist(request):
-    return render(request, 'auctions/watchlist.html')
+    user = request.user.id
+    data = AuctionListing.objects.filter(watchlist=user)
+    context = {
+        'data': data
+    }
+    return render(request, 'auctions/watchlist.html', context)
+    
 
 @login_required(login_url='/login/')
 def comment(request, title):
