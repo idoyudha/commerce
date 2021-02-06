@@ -184,6 +184,8 @@ def bid(request, title):
             bid_data.save()
             # return highest bid and name after saving
             highest_bid = bid_queryset.order_by('amount_bid').last()
+            user_pk = Bid.objects.filter(listing=id).values_list('user_bid',flat=True).get(amount_bid=bid_queryset.order_by('amount_bid').last())
+            name = User.objects.get(pk=user_pk)
             context = {
                 "data": data,
                 "title": title,
