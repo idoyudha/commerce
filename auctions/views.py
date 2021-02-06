@@ -13,12 +13,17 @@ from .forms import ListingForm, BidForm, CommentForm
 
 def index(request):
     data = AuctionListing.objects.filter(active_bid=True)
+    # query categories from models
+    c = AuctionListing.cat
+    cat = [x for y in c for x in y]
+    categories = list(dict.fromkeys(cat))
     # watchlist button config
     user = request.user.id
     data_watchlist = AuctionListing.objects.filter(watchlist=user).values_list('id', flat=True)
     context = {
         'data': data,
-        'data_watchlist': data_watchlist
+        'data_watchlist': data_watchlist,
+        'categories': categories,
     }
     return render(request, "auctions/index.html", context)
 
