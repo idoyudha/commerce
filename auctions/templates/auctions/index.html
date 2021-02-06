@@ -1,12 +1,11 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-
-  <div class="row">
-    <div class="col">
+<div class="row">
+  <div class="col">
       <h2>Active Listings</h2>
-    </div>
-    <div class="col">
+  </div>
+  <div class="col">
       <div class="dropdown d-grid gap-2 d-md-flex justify-content-md-end">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="category" data-bs-toggle="dropdown" aria-expanded="false">
           Category
@@ -17,12 +16,11 @@
           {% endfor %}
         </ul>
       </div>
-    </div>
   </div>
-
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-      {% for list in data %}
-        <div class="col">
+</div>
+<div class="row row-cols-1 row-cols-md-4 g-4">
+  {% for list in data %}
+    <div class="col">
           <div class="card h-100">
             <a href="/view/{{list.title}}">
               <img src="{{ list.imageURL }}" class="card-img-top" onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU'" alt="..." style="width: 100%; height: 15vw; object-fit: cover;">
@@ -52,7 +50,7 @@
               Starting price: ${{ list.price }}
             </div>
           </div>
-        </div>
-      {% endfor %}
-    </div>    
+    </div>
+  {% endfor %}
+</div>   
 {% endblock %}

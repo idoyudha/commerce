@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 
 from .models import User, AuctionListing, Bid, Comment
@@ -12,7 +13,7 @@ from .forms import ListingForm, BidForm, CommentForm
 
 
 def index(request):
-    data = AuctionListing.objects.filter(active_bid=True)
+    data = AuctionListing.objects.filter(active_bid=True).order_by('-time')
     # query categories from models
     c = AuctionListing.cat
     cat = [x for y in c for x in y]
@@ -29,7 +30,7 @@ def index(request):
 
 
 def category(request, category):
-    data = AuctionListing.objects.filter(active_bid=True).filter(category=category)
+    data = AuctionListing.objects.filter(active_bid=True).filter(category=category).order_by('-time')
     # query categories from models
     c = AuctionListing.cat
     cat = [x for y in c for x in y]
@@ -120,15 +121,17 @@ def specific(request, title):
     bid_form = BidForm()
     comment_form = CommentForm()
     # query id of auction
-    pk = AuctionListing.objects.values('pk').get(title=title)
-    id = pk.get('pk')
+    id = AuctionListing.objects.values_list('pk',flat=True).get(title=title)
     # query bid
     bid_queryset = Bid.objects.values_list('amount_bid', flat=True).filter(listing=id)
     highest_bid = bid_queryset.order_by('amount_bid').last()
-    who = Bid.objects.values_list('user_bid', flat=True).get(amount_bid=highest_bid)
-    price = AuctionListing.objects.values('price').get(title=title)
-    if highest_bid is None:
-        highest_bid = price.get('price')
+    highest_bid = 0 if highest_bid is None else highest_bid
+    # user who has the max bid
+    try:
+        user_pk = Bid.objects.filter(listing=id).values_list('user_bid',flat=True).get(amount_bid=bid_queryset.order_by('amount_bid').last())
+        name = User.objects.get(pk=user_pk)
+    except ObjectDoesNotExist:
+        name = None
     # query comment
     comment_queryset = Comment.objects.filter(listing=id)
     comments = comment_queryset.order_by('-time')
@@ -139,10 +142,10 @@ def specific(request, title):
         "data": data,
         "title": title,
         "data_watchlist": data_watchlist,
+        "name": name,
         "bid_form": bid_form,
         "comment_form": comment_form,
         "bid": highest_bid,
-        "who": User.objects.get(pk=who),
         "comments":comments
     }
     return render(request, "auctions/specific.html", context)
@@ -153,12 +156,18 @@ def specific(request, title):
 def bid(request, title):
     data = AuctionListing.objects.filter(title=title)
     price = AuctionListing.objects.values_list('price', flat=True).filter(title=title).last()
-    # bid query
-    pk = AuctionListing.objects.values('pk').get(title=title)
-    id = pk.get('pk')
+    # query id of auction
+    id = AuctionListing.objects.values_list('pk',flat=True).get(title=title)
+    # query bid
     bid_queryset = Bid.objects.values_list('amount_bid', flat=True).filter(listing=id)
     highest_bid = bid_queryset.order_by('amount_bid').last()
     highest_bid = 0 if highest_bid is None else highest_bid
+    # user who has the max bid
+    try:
+        user_pk = Bid.objects.filter(listing=id).values_list('user_bid',flat=True).get(amount_bid=bid_queryset.order_by('amount_bid').last())
+        name = User.objects.get(pk=user_pk)
+    except ObjectDoesNotExist:
+        name = None
     # query comment
     comment_queryset = Comment.objects.filter(listing=id)
     comments = comment_queryset.order_by('-time')
@@ -173,11 +182,12 @@ def bid(request, title):
             bid_data.user_bid = request.user
             bid_data.listing = AuctionListing.objects.get(title=title)
             bid_data.save()
-            # return highest bid after saving
+            # return highest bid and name after saving
             highest_bid = bid_queryset.order_by('amount_bid').last()
             context = {
                 "data": data,
                 "title": title,
+                "name": name,
                 "bid_form": BidForm(),
                 "comment_form": CommentForm(),
                 "bid": highest_bid,
@@ -190,6 +200,7 @@ def bid(request, title):
             context = {
             "data": data,
             "title": title,
+            "name": name,
             "bid_form": bid_form,
             "bid": highest_bid,
             "comment_form": CommentForm(),
@@ -203,6 +214,7 @@ def bid(request, title):
         context = {
             "data": data,
             "title": title,
+            "name": name,
             "bid_form": BidForm(),
             "bid": highest_bid,
             "comment_form": CommentForm(),
