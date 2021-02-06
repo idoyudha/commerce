@@ -11,6 +11,7 @@
           Category
         </button>
         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdowncategory">
+          <li><a class="dropdown-item" href="/">All Category</a></li>
           {% for category in categories %}
           <li><a class="dropdown-item" href="/category/{{category}}">{{ category }}</a></li>
           {% endfor %}
@@ -27,8 +28,10 @@
             </a>
             <div class="card-body">
               <a href="/view/{{list.title}}">
-                <h5 class="card-title">{{ list.title }}</h5>
+                <h5 class="card-title" >{{ list.title }}</h5>                
               </a>
+              <p class="card-text">by {{ list.user_auction }}</p>
+              <hr>
               <p class="card-text">{{ list.description }}</p>
             </div>
             {% if user.is_authenticated %}

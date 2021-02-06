@@ -11,8 +11,10 @@
               </a>
               <div class="card-body">
                 <a href="/view/{{list.title}}">
-                  <h5 class="card-title">{{ list.title }}</h5>
+                  <h5 class="card-title">{{ list.title }}</h5>                  
                 </a>
+                <p class="card-text">by {{ list.user_auction }}</p>
+                <hr>
                 <p class="card-text">{{ list.description }}</p>
               </div>
               {% if user.is_authenticated %}

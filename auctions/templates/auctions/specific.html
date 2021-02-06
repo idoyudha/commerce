@@ -29,7 +29,7 @@
       </div>
       <p class="card-text"><i>Created by: {{ list.user_auction }} at {{ list.time }} UTC </i></p>
       <hr>
-      <p class="card-text mb-2">{{ list.category }}</p>
+      <p class="card-text mb-2">Category: {{ list.category }}</p>
       <p class="card-text mb-1">{{ list.description }}</p>
       <p class="card-text mb-1">Starting Price: <b>${{ list.price }}</b></p>
       {% if bid is None or name is None %}
