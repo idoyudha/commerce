@@ -28,6 +28,23 @@ def index(request):
     return render(request, "auctions/index.html", context)
 
 
+def category(request, category):
+    data = AuctionListing.objects.filter(active_bid=True).filter(category=category)
+    # query categories from models
+    c = AuctionListing.cat
+    cat = [x for y in c for x in y]
+    categories = list(dict.fromkeys(cat))
+    # watchlist button config
+    user = request.user.id
+    data_watchlist = AuctionListing.objects.filter(watchlist=user).values_list('id', flat=True)
+    context = {
+        'data': data,
+        'data_watchlist': data_watchlist,
+        'categories': categories,
+    }
+    return render(request, "auctions/index.html", context)
+
+
 def login_view(request):
     if request.method == "POST":
 
