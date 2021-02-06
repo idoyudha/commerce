@@ -16,9 +16,15 @@
                 <p class="card-text">{{ list.description }}</p>
               </div>
               {% if user.is_authenticated %}
-              <div class="button m-2">
-                <a href="{% url 'remove_watchlist' list.title %}" class="btn btn-outline-warning btn-sm">Remove Watchlist</a>
-              </div>
+                {% if list.active_bid is True %}
+                  <div class="button m-2">
+                    <a href="{% url 'remove_watchlist' list.title %}" class="btn btn-outline-warning btn-sm">Remove Watchlist</a>
+                  </div>
+                {% else %}
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-danger btn-sm" type="button">CLOSED</button>
+                  </div>
+                {% endif %}
               {% endif %}
               <div class="card-footer text-muted">
                 Starting price: ${{ list.price }}

@@ -12,7 +12,7 @@ from .forms import ListingForm, BidForm, CommentForm
 
 
 def index(request):
-    data = AuctionListing.objects.all()
+    data = AuctionListing.objects.filter(active_bid=True)
     # watchlist button config
     user = request.user.id
     data_watchlist = AuctionListing.objects.filter(watchlist=user).values_list('id', flat=True)
@@ -74,6 +74,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+
 @login_required(login_url='/login/')
 def new_listing(request):
     if request.method == 'POST':
@@ -89,6 +90,7 @@ def new_listing(request):
         "form": form
     }
     return render(request, "auctions/new_listing.html", context)
+
 
 # should display (at minimum) the title, description, current price, and photo (if one exists for the listing).
 def specific(request, title):
@@ -122,6 +124,7 @@ def specific(request, title):
         "comments":comments
     }
     return render(request, "auctions/specific.html", context)
+
 
 # Need improvement for query the message, both success and error. should redirect with the same page
 @login_required(login_url='/login/')
@@ -185,6 +188,7 @@ def bid(request, title):
         }
         return render(request, "auctions/specific.html", context)
 
+
 @login_required(login_url='/login/')
 def watchlist_view(request):
     user = request.user.id
@@ -193,6 +197,7 @@ def watchlist_view(request):
         'data': data
     }
     return render(request, 'auctions/watchlist.html', context)
+
 
 @login_required(login_url='/login/')
 def add_watchlist(request, title):
@@ -210,6 +215,7 @@ def remove_watchlist(request, title):
     listing.watchlist.remove(user_W)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 @login_required(login_url='/login/')
 def comment(request, title):
     if request.method == 'POST':
@@ -224,7 +230,8 @@ def comment(request, title):
         comment_form = CommentForm()
     return redirect('specific', title=title)
 
+
 @login_required(login_url='/login/')
 def close_bid(request,title):
-    user = request.user.id
+    AuctionListing.objects.filter(title=title).update(active_bid=False)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

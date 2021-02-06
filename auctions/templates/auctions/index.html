@@ -17,12 +17,18 @@
             </div>
             {% if user.is_authenticated %}
             <div class="button m-2">
-              {% if list.id not in data_watchlist %}
-                <a href="{% url 'add_watchlist' list.title %}" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
+              {% if list.active_bid is True %}
+                {% if list.id not in data_watchlist %}
+                  <a href="{% url 'add_watchlist' list.title %}" class="btn btn-outline-success btn-sm">Add to Watchlist</a>
+                {% else %}
+                  <a href="{% url 'remove_watchlist' list.title %}" class="btn btn-outline-warning btn-sm">Remove Watchlist</a>
+                {% endif %}
               {% else %}
-                <a href="{% url 'remove_watchlist' list.title %}" class="btn btn-outline-warning btn-sm">Remove Watchlist</a>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-danger btn-sm" type="button">CLOSED</button>
+                </div>
               {% endif %}
-            </div>
+              </div>
             {% endif %}
             <div class="card-footer text-muted">
               Starting price: ${{ list.price }}
