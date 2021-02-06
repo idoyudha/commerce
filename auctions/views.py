@@ -130,6 +130,9 @@ def bid(request, title):
     # query comment
     comment_queryset = Comment.objects.filter(listing=id)
     comments = comment_queryset.order_by('-time')
+    # watchlist button config
+    user = request.user.id
+    data_watchlist = AuctionListing.objects.filter(watchlist=user).values_list('id', flat=True)
     if request.method == 'POST':
         bid_form = BidForm(request.POST)
         bid = int(request.POST.get('amount_bid'))
@@ -147,7 +150,8 @@ def bid(request, title):
                 "comment_form": CommentForm(),
                 "bid": highest_bid,
                 "message1": 'Bid success!',
-                "comments": comments
+                "comments": comments,
+                "data_watchlist": data_watchlist,
             }
             return render(request, "auctions/specific.html", context)
         else:
@@ -158,7 +162,8 @@ def bid(request, title):
             "bid": highest_bid,
             "comment_form": CommentForm(),
             "message2": 'Bid must be greater than last bid or starting price',
-            "comments": comments
+            "comments": comments,
+            "data_watchlist": data_watchlist,
             }
             return render(request, "auctions/specific.html", context)
 
@@ -168,19 +173,35 @@ def bid(request, title):
             "title": title,
             "bid_form": BidForm(),
             "bid": highest_bid,
-            "comment_form": CommentForm()
+            "comment_form": CommentForm(),
+            "data_watchlist": data_watchlist,
         }
         return render(request, "auctions/specific.html", context)
 
 @login_required(login_url='/login/')
-def watchlist(request):
+def watchlist_view(request):
     user = request.user.id
     data = AuctionListing.objects.filter(watchlist=user)
     context = {
         'data': data
     }
     return render(request, 'auctions/watchlist.html', context)
-    
+
+@login_required(login_url='/login/')
+def add_watchlist(request, title):
+    listing = AuctionListing.objects.get(title=title)
+    user = request.user.id
+    user_W = User.objects.get(pk=user)
+    listing.watchlist.add(user_W)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required(login_url='/login/')
+def remove_watchlist(request, title):
+    listing = AuctionListing.objects.get(title=title)
+    user = request.user.id
+    user_W = User.objects.get(pk=user)
+    listing.watchlist.remove(user_W)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required(login_url='/login/')
 def comment(request, title):
