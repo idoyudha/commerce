@@ -101,6 +101,10 @@ def specific(request, title):
     # query bid
     bid_queryset = Bid.objects.values_list('amount_bid', flat=True).filter(listing=id)
     highest_bid = bid_queryset.order_by('amount_bid').last()
+    who = Bid.objects.values_list('user_bid', flat=True).get(amount_bid=highest_bid)
+    price = AuctionListing.objects.values('price').get(title=title)
+    if highest_bid is None:
+        highest_bid = price.get('price')
     # query comment
     comment_queryset = Comment.objects.filter(listing=id)
     comments = comment_queryset.order_by('-time')
@@ -114,10 +118,13 @@ def specific(request, title):
         "bid_form": bid_form,
         "comment_form": comment_form,
         "bid": highest_bid,
+        "who": User.objects.get(pk=who),
         "comments":comments
     }
     return render(request, "auctions/specific.html", context)
 
+# Need improvement for query the message, both success and error. should redirect with the same page
+@login_required(login_url='/login/')
 def bid(request, title):
     data = AuctionListing.objects.filter(title=title)
     price = AuctionListing.objects.values_list('price', flat=True).filter(title=title).last()
@@ -216,3 +223,8 @@ def comment(request, title):
     else:
         comment_form = CommentForm()
     return redirect('specific', title=title)
+
+@login_required(login_url='/login/')
+def close_bid(request,title):
+    user = request.user.id
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -24,18 +24,18 @@
         </div>
         {% endif %}
       </div>
-      <p class="card-text"><small><i>Created by: {{ list.user_auction }} at {{ list.time }} UTC </i></small></p>
+      <p class="card-text"><i>Created by: {{ list.user_auction }} at {{ list.time }} UTC </i></p>
       <hr>
-      <p class="card-text mb-2"><small>{{ list.category }}</small></p>
+      <p class="card-text mb-2">{{ list.category }}</p>
       <p class="card-text mb-1">{{ list.description }}</p>
       <p class="card-text mb-1">Starting Price: <b>${{ list.price }}</b></p>
-      <p class="card-text mb-1">Highest Bid: <b>${{ bid }}</b></p>
+      <p class="card-text mb-1">Highest Bid: <b>${{ bid }}</b> by {{ who }}</p>
       
     </div>
     <div class="col-sm">
-      {% if list.user != user %}
-        {% if user.is_authenticated %}
-        <form action="{% url 'bid' title %}" method="post">
+      {% if user.is_authenticated %}
+        {% if list.user_auction != user %}
+            <form action="{% url 'bid' title %}" method="post">
         {% csrf_token %}
         <div class="card border-info mb-3 h-100">
           <h5 class="card-header">Bid</h5>
@@ -50,27 +50,27 @@
             </div>
           </div>
         </div>
-        </form>
-        {% if message1 %}
-          <div class="alert alert-success" role="alert">
+            </form>
+          {% if message1 %}
+            <div class="alert alert-success" role="alert">
             {{ message1 }}
-          </div>
-        {% endif %}
-        {% if message2 %}
-          <div class="alert alert-warning" role="alert">
+            </div>
+          {% endif %}
+          {% if message2 %}
+            <div class="alert alert-warning" role="alert">
             {{ message2 }}
-          </div>
-        {% endif %}
+            </div>
+          {% endif %}
         {% else %}
-        <div class="bid log" style="margin: auto; text-align: center; border: 1px solid black; height: 100%;">
-          <p>You need to log in for bidding!</p> 
-          <a href="{% url 'login' %}">Log In</a>
-        </div>
+          <div class="d-grid gap-2 col-6 mx-auto">
+            <a href="{% url 'close_bid' title%}" class="btn btn-outline-dark btn-sm">Close this bid!</a>
+          </div>
         {% endif %}
       {% else %}
-        <div class="d-grid gap-2 col-6 mx-auto">
-          <button type="button" class="btn btn-outline-warning btn-sm">Close this bid!</button>
-        </div>
+            <div class="bid log" style="margin: auto; text-align: center; border: 1px solid black; height: 100%;">
+            <p>You need to log in for bidding!</p> 
+            <a href="{% url 'login' %}">Log In</a>
+            </div>
       {% endif %}
     </div>
   </div>

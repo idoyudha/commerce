@@ -10,6 +10,7 @@ class User(AbstractUser):
 class AuctionListing(models.Model):
     user_auction = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
+    active_bid = models.BooleanField(default=True)
     #category
     cat = [
         ('No Category', 'No Category'),

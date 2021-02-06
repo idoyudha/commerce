@@ -45,3 +45,7 @@ img {
     height: 300px;
     margin-top: 50px;
 }
+
+.card-text {
+    font-size: 14px;
+}
