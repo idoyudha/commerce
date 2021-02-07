@@ -228,7 +228,7 @@ def bid(request, title):
 @login_required(login_url='/login/')
 def watchlist_view(request):
     user = request.user.id
-    data = AuctionListing.objects.filter(watchlist=user)
+    data = AuctionListing.objects.filter(watchlist=user).order_by('-time')
     context = {
         'data': data
     }

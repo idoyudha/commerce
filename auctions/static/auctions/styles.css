@@ -22,6 +22,10 @@ html, body {
     margin: 5px;
 }
 
+nav {
+    padding: 0px 100px;
+}
+
 .nav-item {
     border-style: 1px solid white;
     border-width: medium;
