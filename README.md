@@ -35,7 +35,6 @@ Quit the server with CONTROL-C.
 - Languages:
   - HTML
   - CSS
-  - JavaScript
 - Main framework/libraries:
   - [Django template language](https://docs.djangoproject.com/en/3.1/ref/templates/language/)
   - [Bootstrap](https://getbootstrap.com/)
