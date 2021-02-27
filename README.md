@@ -2,7 +2,7 @@
 Design an eBay-like e-commerce auction site that will allow users to post auction listings, place bids on listings, comment on those listings, and add listings to a “watchlist.”
 
 ## Overview
-Commerce is the third project for Harvard CS50's Web Programming with Python and JavaScript course. The project specifications are listed [here](https://cs50.harvard.edu/web/2020/projects/2/commerce/).
+Commerce is the third project for Harvard CS50's Web Programming with Python and JavaScript course. The project specifications are listed [here](https://cs50.harvard.edu/web/2020/projects/2/commerce/). And the [demonstration](https://youtu.be/g7FCuTAowHo)
 
 ## Getting Started
 These instruction will get you a copy of the proejct up and running on your local machine for development and testing purposes.
